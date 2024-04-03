@@ -1,42 +1,3 @@
-const WebSocket = require('ws');
-const net = require('net');
-
-const LOCAL_SSH_SERVER_HOST = 'marceldobehere.com';
-const LOCAL_SSH_SERVER_PORT = 2222;
-
-const wss = new WebSocket.Server({ port: 443 });
-console.log('> Started server on *:443');
-
-wss.on('connection', ws => {
-    console.log(`> Client connected`);
-    let socket = new net.Socket();
-    socket.connect(LOCAL_SSH_SERVER_PORT, LOCAL_SSH_SERVER_HOST, () => {
-        console.log(`> Connected to SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
-    });
-
-    socket.on('close', () => {
-        console.log(`> Disconnected from SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
-        try { ws.close();}
-        catch (e) {}
-    });
-    ws.on('close', () => {
-        console.log(`> Client disconnected`);
-        try {socket.destroy();}
-        catch (e) {}
-    });
-
-    socket.on('data', data => {
-        ws.send(data);
-        console.log(`> Received data from SSH server`);
-    });
-    ws.on('message', message => {
-        socket.write(message);
-        console.log(`> Received data from client`);
-    });
-});
-
-
-/*
 const LOCAL_SSH_SERVER_HOST = 'marceldobehere.com';
 const LOCAL_SSH_SERVER_PORT = 2222;
 
@@ -86,37 +47,77 @@ else
             cert: fs.readFileSync(__dirname + "/data/ssl/cert.pem"),
         });
 
+const wss = new WebSocket.Server({ server });
+wss.on('connection', ws => {
+    console.log(`> Client connected`);
+    let socket = new net.Socket();
+    socket.connect(LOCAL_SSH_SERVER_PORT, LOCAL_SSH_SERVER_HOST, () => {
+        console.log(`> Connected to SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
+    });
+
+    socket.on('close', () => {
+        console.log(`> Disconnected from SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
+        try { ws.close();}
+        catch (e) {}
+    });
+    ws.on('close', () => {
+        console.log(`> Client disconnected`);
+        try {socket.destroy();}
+        catch (e) {}
+    });
+
+    socket.on('data', data => {
+        ws.send(data);
+        console.log(`> Received data from SSH server`);
+    });
+    ws.on('message', message => {
+        socket.write(message);
+        console.log(`> Received data from client`);
+    });
+});
+
 let port = USE_HTTPS ? 443 : 80;
 server.listen(port, () => {
     console.log('> Started server on *:'+port);
+});
 
-    const wss = new WebSocket.Server({ server:server });
-    wss.on('connection', ws => {
-        console.log(`> Client connected`);
-        let socket = new net.Socket();
-        socket.connect(LOCAL_SSH_SERVER_PORT, LOCAL_SSH_SERVER_HOST, () => {
-            console.log(`> Connected to SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
-        });
 
-        socket.on('close', () => {
-            console.log(`> Disconnected from SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
-            try { ws.close();}
-            catch (e) {}
-        });
-        ws.on('close', () => {
-            console.log(`> Client disconnected`);
-            try {socket.destroy();}
-            catch (e) {}
-        });
 
-        socket.on('data', data => {
-            ws.send(data);
-            console.log(`> Received data from SSH server`);
-        });
-        ws.on('message', message => {
-            socket.write(message);
-            console.log(`> Received data from client`);
-        });
+/*
+const WebSocket = require('ws');
+const net = require('net');
+
+const LOCAL_SSH_SERVER_HOST = 'marceldobehere.com';
+const LOCAL_SSH_SERVER_PORT = 2222;
+
+const wss = new WebSocket.Server({ port: 443 });
+console.log('> Started server on *:443');
+
+wss.on('connection', ws => {
+    console.log(`> Client connected`);
+    let socket = new net.Socket();
+    socket.connect(LOCAL_SSH_SERVER_PORT, LOCAL_SSH_SERVER_HOST, () => {
+        console.log(`> Connected to SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
+    });
+
+    socket.on('close', () => {
+        console.log(`> Disconnected from SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
+        try { ws.close();}
+        catch (e) {}
+    });
+    ws.on('close', () => {
+        console.log(`> Client disconnected`);
+        try {socket.destroy();}
+        catch (e) {}
+    });
+
+    socket.on('data', data => {
+        ws.send(data);
+        console.log(`> Received data from SSH server`);
+    });
+    ws.on('message', message => {
+        socket.write(message);
+        console.log(`> Received data from client`);
     });
 });
 */
