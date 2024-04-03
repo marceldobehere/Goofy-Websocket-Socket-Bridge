@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  goofy_ws_ssh:
+    container_name: goofy_ws_ssh
+    build: .
+    volumes:
+      - "/etc/letsencrypt:/etc/letsencrypt"
+    networks:
+      - "nginx-router_default"
+      - "default"
+    restart: always
+
+volumes:
+  data:
+networks:
+  default:
+  nginx-router_default:
+    external: true
