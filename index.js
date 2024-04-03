@@ -76,48 +76,43 @@ wss.on('connection', ws => {
     });
 });
 
+
+
+// let WebSocketServer = require('websocket').server;
+//
+// wsServer = new WebSocketServer({
+//     httpServer: server,
+// });
+//
+// wsServer.on('request', function(request) {
+//     var connection = request.accept('echo-protocol', request.origin);
+//     console.log((new Date()) + ' Connection accepted.');
+//     connection.on('message', function(message) {
+//         if (message.type === 'utf8') {
+//             console.log('Received Message: ' + message.utf8Data);
+//             connection.sendUTF(message.utf8Data);
+//         }
+//         else if (message.type === 'binary') {
+//             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+//             connection.sendBytes(message.binaryData);
+//         }
+//     });
+//     connection.on('close', function(reasonCode, description) {
+//         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+//     });
+// });
+//
+
+
+
+
+
+
+
+
+
+
 let port = USE_HTTPS ? 443 : 80;
 server.listen(port, () => {
     console.log('> Started server on *:'+port);
 });
-
-
-
-/*
-const WebSocket = require('ws');
-const net = require('net');
-
-const LOCAL_SSH_SERVER_HOST = 'marceldobehere.com';
-const LOCAL_SSH_SERVER_PORT = 2222;
-
-const wss = new WebSocket.Server({ port: 443 });
-console.log('> Started server on *:443');
-
-wss.on('connection', ws => {
-    console.log(`> Client connected`);
-    let socket = new net.Socket();
-    socket.connect(LOCAL_SSH_SERVER_PORT, LOCAL_SSH_SERVER_HOST, () => {
-        console.log(`> Connected to SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
-    });
-
-    socket.on('close', () => {
-        console.log(`> Disconnected from SSH server at ${LOCAL_SSH_SERVER_HOST}:${LOCAL_SSH_SERVER_PORT}`);
-        try { ws.close();}
-        catch (e) {}
-    });
-    ws.on('close', () => {
-        console.log(`> Client disconnected`);
-        try {socket.destroy();}
-        catch (e) {}
-    });
-
-    socket.on('data', data => {
-        ws.send(data);
-        console.log(`> Received data from SSH server`);
-    });
-    ws.on('message', message => {
-        socket.write(message);
-        console.log(`> Received data from client`);
-    });
-});
-*/
