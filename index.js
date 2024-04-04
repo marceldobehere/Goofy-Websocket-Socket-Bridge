@@ -5,8 +5,6 @@ const LOCAL_SSH_SERVER_PORT = 2222;
 const WebSocket = require('ws');
 const net = require('net');
 const fs = require("fs");
-//const express = require('express');
-//const app = express();
 const http = require("http");
 const https = require("https");
 
@@ -75,42 +73,6 @@ wss.on('connection', ws => {
         console.log(`> Received data from client`);
     });
 });
-
-
-
-// let WebSocketServer = require('websocket').server;
-//
-// wsServer = new WebSocketServer({
-//     httpServer: server,
-// });
-//
-// wsServer.on('request', function(request) {
-//     var connection = request.accept('echo-protocol', request.origin);
-//     console.log((new Date()) + ' Connection accepted.');
-//     connection.on('message', function(message) {
-//         if (message.type === 'utf8') {
-//             console.log('Received Message: ' + message.utf8Data);
-//             connection.sendUTF(message.utf8Data);
-//         }
-//         else if (message.type === 'binary') {
-//             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-//             connection.sendBytes(message.binaryData);
-//         }
-//     });
-//     connection.on('close', function(reasonCode, description) {
-//         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-//     });
-// });
-//
-
-
-
-
-
-
-
-
-
 
 let port = USE_HTTPS ? 443 : 80;
 server.listen(port, () => {
